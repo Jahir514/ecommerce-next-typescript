@@ -8,7 +8,7 @@ interface SingleProductProps {
 const SingleProduct: React.FC<SingleProductProps> = ({ product }) => {
   return (
     <li>
-      <strong>{product.name}</strong> - {product.price}
+      <strong>{product.name}</strong> - Sell: {product.price.sell}, Purchase: {product.price.purchase}
     </li>
   );
 };
