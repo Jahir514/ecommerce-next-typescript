@@ -2,10 +2,10 @@
 // Navbar component migrated from ref_frontend
 import React, { useState } from "react";
 import SearchBar from "./navbar/SearchBar";
-import Location from "./navbar/Location";
+import Location from "./navbar/location/Location";
 import Image from "next/image";
-// import Cart from "../common/Cart"; // Uncomment if you have a Cart component
-// import Image from "next/image"; // Use Next.js Image for optimized images
+import Cart from "../common/Cart";
+import { UserCircle, User, LogOut, List, Search } from "lucide-react";
 
 const Navbar: React.FC = () => {
 	const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
 							<SearchBar />
 						</div>
 						<div className="w-2/5 flex items-center text-right justify-end gap-5 header-bottom-col">
-							{/* <Cart /> */}
+							<Cart />
 							<Location />
 							<div className="profile-button min-w-[35px] 2md:min-w[65px]">
 								<div className="signin-dropdown">
@@ -62,7 +62,7 @@ const Navbar: React.FC = () => {
 										>
 											{/* TODO: Add authentication logic */}
 											<div className="flex justify-end gap-1 items-center text-font-17 text-themeColor ">
-												<i className="fa-regular fa-circle-user mr-0.5"></i> Login
+												<UserCircle className="mr-1 w-5 h-5" /> Login
 											</div>
 										</button>
 										{/* Dropdown Menu */}
@@ -72,7 +72,7 @@ const Navbar: React.FC = () => {
 													href="#"
 													className="dropdown-item block px-4 py-2 text-left items-center text-font-14 text-gray-700 hover:text-themeColor hover:bg-[#f8f9fa] "
 												>
-													<i className="text-font-14 hover:text-themeColor fas fa-user mr-1"></i> My Profile
+													<User className="text-font-14 hover:text-themeColor mr-1 w-4 h-4" /> My Profile
 												</a>
 												{/* Add more dropdown items as needed */}
 												<a
@@ -80,7 +80,8 @@ const Navbar: React.FC = () => {
 													className="dropdown-item block px-4 py-2 text-left items-center text-font-14 text-gray-700 hover:text-themeColor hover:bg-[#f8f9fa] border-t border-t-[#e9ecef]"
 													onClick={handleSignOut}
 												>
-													<i className="text-font-14 hover:text-themeColor fas fa-sign-out-alt mr-1"></i> Sign Out
+													
+													<LogOut className="text-font-14 hover:text-themeColor mr-1 w-4 h-4" /> Sign Out
 												</a>
 											</div>
 										)}
@@ -93,7 +94,7 @@ const Navbar: React.FC = () => {
 				{/* Smaller to Mid Devices Search */}
 				<div className="header-sm flex items-center mt-1 mb-0 mx-3 lg:hidden">
 					<button type="button" className="btn btn-default btn-category-all d-sm-none mr-3">
-						<i className="fas fa-list"></i>
+						<List className="w-5 h-5" />
 					</button>
 					<div className="header-bottom-mid bg-white rounded shadow-sm px-2 flex-fill">
 						<form className="flex">
@@ -113,7 +114,7 @@ const Navbar: React.FC = () => {
 									/>
 									<div className="input-group-append">
 										<button type="button" className="input-group-text">
-											<i className="fas fa-search mr-2 text-success"></i> Search
+											<Search className="mr-2 w-4 h-4 text-success" /> Search
 										</button>
 									</div>
 								</div>
@@ -130,7 +131,7 @@ const Navbar: React.FC = () => {
 							className="btn text-font-16 tracking-[1px] text-uppercase text-[#F8FAFC] btn-block flex items-center justify-between font-weight-bold transition-colors"
 							onClick={handleAllCategoriesClick}
 						>
-							All Categories <i className="fas fa-list pl-2"></i>
+							All Categories <List className="pl-2 w-7 h-7 font-bold" />
 						</button>
 					</div>
 					<div
