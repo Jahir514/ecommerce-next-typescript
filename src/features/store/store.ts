@@ -1,18 +1,18 @@
-
 import { configureStore } from '@reduxjs/toolkit';
 import locationReducer from '../locations/locationSlice';
-import { api } from '../api/api';
-
-// Add other reducers here as needed
+import categoriesReducer from '../categories/categoriesSlice';
+import sidenavReducer from '../common/sidenav/sidenavSlice';
+import { api } from '../api/api'; // Single RTK Query instance
 
 export const store = configureStore({
   reducer: {
     location: locationReducer,
-    [api.reducerPath]: api.reducer, // RTK Query reducer
-    // Add other feature reducers here
+    sidenav: sidenavReducer,
+    categories: categoriesReducer,
+    [api.reducerPath]: api.reducer, // Only one RTK Query reducer
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(api.middleware), // RTK Query middleware
+    getDefaultMiddleware().concat(api.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

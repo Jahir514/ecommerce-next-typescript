@@ -1,6 +1,8 @@
-'use client';
+"use client";
 // Navbar component migrated from ref_frontend
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleSidenav } from "@/features/common/sidenav/sidenavSlice";
 import SearchBar from "./navbar/SearchBar";
 import Location from "./navbar/location/Location";
 import Image from "next/image";
@@ -8,23 +10,35 @@ import Cart from "../common/Cart";
 import { UserCircle, User, LogOut, List, Search } from "lucide-react";
 
 const Navbar: React.FC = () => {
+	const dispatch = useDispatch();
 	const [dropdownOpen, setDropdownOpen] = useState(false);
-	// TODO: Add Next.js authentication and state logic if needed
-
+	const sidebarOpen = useSelector((state: any) => state.location);
+	console.log(sidebarOpen);
 	// Example logo path from public folder
 	const logo = "/assets/images/logo-beta.png";
 	const profile_image = "/assets/images/fox.jpg";
 
+	/**
+	 * Handle logo click (implement navigation if needed)
+	 */
 	const handleLogoClick = () => {
-		// TODO: Implement navigation logic for Next.js
+		// ...existing code...
 	};
 
+	/**
+	 * Handle All Categories button click
+	 * Dispatches toggleSidenav action to open/close sidebar
+	 * Follows code/documentation style of Location.tsx
+	 */
 	const handleAllCategoriesClick = () => {
-		// TODO: Implement sidebar toggle logic for Next.js
+		dispatch(toggleSidenav());
 	};
 
+	/**
+	 * Handle sign out (implement logic if needed)
+	 */
 	const handleSignOut = () => {
-		// TODO: Implement sign out logic for Next.js
+		// ...existing code...
 	};
 
 	return (
@@ -41,8 +55,8 @@ const Navbar: React.FC = () => {
 										src={logo}
 										alt="Amana Big Bazar"
 										className="img-fluid cursor-pointer"
-                                        width={130}
-                                        height={40}
+										width={130}
+										height={40}
 									/>
 								</div>
 							</div>
@@ -80,7 +94,6 @@ const Navbar: React.FC = () => {
 													className="dropdown-item block px-4 py-2 text-left items-center text-font-14 text-gray-700 hover:text-themeColor hover:bg-[#f8f9fa] border-t border-t-[#e9ecef]"
 													onClick={handleSignOut}
 												>
-													
 													<LogOut className="text-font-14 hover:text-themeColor mr-1 w-4 h-4" /> Sign Out
 												</a>
 											</div>
