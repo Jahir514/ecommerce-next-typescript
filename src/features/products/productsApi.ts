@@ -1,44 +1,61 @@
-import { api } from '../api/api';
-import type { Product } from '../../types/product';
+import { api } from "../api/api";
+import type { Product } from "../../types/product";
+
+export interface GetProductsParams {
+  pageNo: number;
+  branchID: string;
+  queryString?: Record<string, any>;
+}
 
 export const productsApi = api.injectEndpoints({
   endpoints: (builder) => ({
-    // Fetch paginated products: expects { pageNo, branch, type, text } as params
-    getProducts: builder.query<any, { pageNo: number; branch?: string; type?: string; text?: string }>({
-      query: ({ pageNo, branch, type, text }) => {
-        let url = `product/list/${pageNo}`;
-        const params = [];
-        if (branch) params.push(`branch=${branch}`);
-        if (type && text) params.push(`type=${type}&text=${encodeURIComponent(text)}`);
-        if (params.length) url += `?${params.join('&')}`;
-        return url;
+    getProducts: builder.query<any, GetProductsParams>({
+      query: ({ pageNo, branchID, queryString = {} }) => {
+        let searchQuery = "";
+        for (const key in queryString) {
+          if (
+            queryString[key] !== undefined &&
+            queryString[key] !== null &&
+            queryString[key] !== ""
+          ) {
+            searchQuery += `&${key}=${encodeURIComponent(queryString[key])}`;
+          }
+        }
+        let apiUrl = `/product/lists/${pageNo}?branch=${branchID}${searchQuery}`;
+        return apiUrl;
+      },
+      // providesTags: (result, error, { pageNo, branchID }) => [
+      //   { type: "Product", id: `LIST-${branchID}-${pageNo}` },
+      // ],
+      transformResponse: (response: any) => {
+        return response;
       },
     }),
-    // Fetch single product by ID (if implemented in backend)
+    // ...existing code...
     getProduct: builder.query<Product, string>({
-      query: (id) => `product/${id}`,
+      query: (id) => `/product/${id}`,
     }),
-    // Add product
     addProduct: builder.mutation<any, Partial<Product>>({
       query: (body) => ({
-        url: 'product/add',
-        method: 'POST',
+        url: "/product/add",
+        method: "POST",
         body,
       }),
     }),
-    // Update product
-    updateProduct: builder.mutation<any, { id: string; data: Partial<Product> }>({
+    updateProduct: builder.mutation<
+      any,
+      { id: string; data: Partial<Product> }
+    >({
       query: ({ id, data }) => ({
-        url: `product/update`,
-        method: 'PUT',
+        url: `/product/update`,
+        method: "PUT",
         body: { id, ...data },
       }),
     }),
-    // Delete product
     deleteProduct: builder.mutation<any, { id: string }>({
       query: ({ id }) => ({
-        url: `product/remove`,
-        method: 'DELETE',
+        url: `/product/remove`,
+        method: "DELETE",
         body: { id },
       }),
     }),
@@ -46,4 +63,8 @@ export const productsApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export const { useGetProductsQuery, useGetProductQuery } = productsApi;
+export const {
+  useGetProductsQuery,
+  useLazyGetProductsQuery,
+  useGetProductQuery,
+} = productsApi;

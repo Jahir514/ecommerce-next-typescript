@@ -7,40 +7,12 @@ import api from '../api/api';
 export const categoriesApi = api.injectEndpoints({
   endpoints: (builder) => ({
     /**
-     * Get paginated categories with optional search by type/text
-     * GET /category/:pageNo?type=...&text=...
-     */
-    getCategoriesPaginated: builder.query({
-      query: ({ pageNo, type, text }) => {
-        let url = `category/${pageNo}`;
-        const params = [];
-        if (type) params.push(`type=${encodeURIComponent(type)}`);
-        if (text) params.push(`text=${encodeURIComponent(text)}`);
-        if (params.length) url += `?${params.join('&')}`;
-        return url;
-      },
-    }),
-
-    /**
      * Get all categories (optionally filtered by branch)
      * GET /category?branch=...
      */
     getCategories: builder.query({
       query: (branchId) => branchId ? `category?branch=${branchId}` : 'category',
     }),
-
-    /**
-     * Get categories for selected branches (POST)
-     * POST /category/common/selected/branch
-     */
-    getCategoriesForBranches: builder.mutation({
-      query: (body) => ({
-        url: 'category/common/selected/branch',
-        method: 'POST',
-        body,
-      }),
-    }),
-
     /**
      * Get single category by ID
      * GET /category/data/:categoryID
@@ -69,9 +41,7 @@ export const categoriesApi = api.injectEndpoints({
 });
 
 export const {
-  useGetCategoriesPaginatedQuery,
   useGetCategoriesQuery,
-  useGetCategoriesForBranchesMutation,
   useGetCategoryByIdQuery,
   useGetCategoryBySlugQuery,
   useGetCategoriesWithSubcategoriesQuery,

@@ -1,2 +1,2 @@
-export * from './locationsApi';
-export { default as locationReducer } from './locationSlice';
+export { default as locationReducer } from "./locationSlice";
+export * from "./locationsApi";

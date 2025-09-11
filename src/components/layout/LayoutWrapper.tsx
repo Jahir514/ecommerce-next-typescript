@@ -1,6 +1,7 @@
 // LayoutWrapper component migrated and modernized for Next.js/RTK Query
 "use client";
 import React, { ReactNode, useEffect, useRef } from "react";
+import { setSelectedBranch } from "@/features/locations/locationSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { usePathname } from "next/navigation";
 import Sidenav from "./Sidenav";
@@ -24,9 +25,16 @@ const LayoutWrapper: React.FC<LayoutWrapperProps> = ({ children }) => {
   // Area selection from localStorage
   const [area, setArea] = React.useState<string | null>(null);
 
-  React.useEffect(() => {
-    setArea(typeof window !== "undefined" ? localStorage.getItem("selectedArea") : null);
-  }, []);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setArea(localStorage.getItem("selectedArea"));
+      const storedBranchId = localStorage.getItem("branchId");
+      if (storedBranchId) {
+        // You may want to fetch branch details from your branch list if needed
+        dispatch(setSelectedBranch({ id: storedBranchId, name: "" })); // Set name if available
+      }
+    }
+  }, [dispatch]);
 
   // Sidebar visibility logic
   const shouldShowSidebar = !excludedPages.includes(pathname);

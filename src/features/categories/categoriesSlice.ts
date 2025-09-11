@@ -17,7 +17,7 @@ import { categoriesApi } from "./categoriesApi";
  * Defines the shape of the categories slice state.
  */
 export interface CategoriesState {
-  productCategoryData: any[];
+  categoryWithSubcategory: any[];
   isLoading: boolean;
   isError: boolean;
   errorMessage: string | null;
@@ -28,7 +28,7 @@ export interface CategoriesState {
  * Initial state for the categories slice.
  */
 const initialState: CategoriesState = {
-  productCategoryData: [],
+  categoryWithSubcategory: [],
   isLoading: false,
   isError: false,
   errorMessage: null,
@@ -48,72 +48,27 @@ const initialState: CategoriesState = {
 const categoriesSlice = createSlice({
   name: "categories",
   initialState,
-  reducers: {
-    /**
-     * Set the product category data array.
-     */
-    setProductCategoryData(state, action: PayloadAction<any[]>) {
-      state.productCategoryData = action.payload;
-    },
-    /**
-     * Set the selected branch ID.
-     */
-    setBranchId(state, action: PayloadAction<string | null>) {
-      state.branchId = action.payload;
-    },
-    /**
-     * Set loading state when fetching categories.
-     */
-    fetchCategories(state) {
-      state.isLoading = true;
-      state.isError = false;
-      state.errorMessage = null;
-    },
-    /**
-     * Store fetched categories and reset error/loading states.
-     */
-    fetchCategoriesSuccess(state, action: PayloadAction<any[]>) {
-      state.isLoading = false;
-      state.productCategoryData = action.payload;
-      state.isError = false;
-      state.errorMessage = null;
-    },
-    /**
-     * Set error state and store error message when fetching categories fails.
-     */
-    fetchCategoriesError(state, action: PayloadAction<string | undefined>) {
-      state.isLoading = false;
-      state.isError = true;
-      state.errorMessage = action.payload || "Failed to fetch categories.";
-    },
-    /**
-     * Reset error state and message.
-     */
-    clearError(state) {
-      state.isError = false;
-      state.errorMessage = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      // Handle category product with RTK Query
+      // Handle branch-wise category with subcategory data from RTK Query
       .addMatcher(
-        categoriesApi.endpoints.getCategoriesPaginated.matchPending,
+        categoriesApi.endpoints.getCategoriesWithSubcategories.matchPending,
         (state) => {
           state.isLoading = true;
         }
       )
       .addMatcher(
-        categoriesApi.endpoints.getCategoriesPaginated.matchFulfilled,
+        categoriesApi.endpoints.getCategoriesWithSubcategories.matchFulfilled,
         (state, action: PayloadAction<any>) => {
           state.isLoading = false;
-          state.productCategoryData = action.payload;
+          state.categoryWithSubcategory = action.payload;
           state.isError = false;
           state.errorMessage = null;
         }
       )
       .addMatcher(
-        categoriesApi.endpoints.getCategoriesPaginated.matchRejected,
+        categoriesApi.endpoints.getCategoriesWithSubcategories.matchRejected,
         (state, action: any) => {
           state.isLoading = false;
           state.isError = true;
@@ -123,12 +78,5 @@ const categoriesSlice = createSlice({
   },
 });
 
-export const {
-  setProductCategoryData,
-  setBranchId,
-  fetchCategories,
-  fetchCategoriesSuccess,
-  fetchCategoriesError,
-  clearError,
-} = categoriesSlice.actions;
+// No reducer actions to export; all state is managed by RTK Query extraReducers
 export default categoriesSlice.reducer;

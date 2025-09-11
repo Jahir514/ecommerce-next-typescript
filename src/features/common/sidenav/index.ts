@@ -1,2 +1,1 @@
-export { default as sidenavReducer } from './sidenavSlice';
-export * from './sidenavSlice';
+export { default as sidenavReducer } from "./sidenavSlice";

@@ -13,7 +13,6 @@ const Navbar: React.FC = () => {
 	const dispatch = useDispatch();
 	const [dropdownOpen, setDropdownOpen] = useState(false);
 	const sidebarOpen = useSelector((state: any) => state.location);
-	console.log(sidebarOpen);
 	// Example logo path from public folder
 	const logo = "/assets/images/logo-beta.png";
 	const profile_image = "/assets/images/fox.jpg";

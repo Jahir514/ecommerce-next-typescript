@@ -1,4 +1,3 @@
-
 /**
  * Sidenav component
  * Displays categories and subcategories, handles selection and expansion.
@@ -7,6 +6,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setExpandedCategory } from "@/features/common/sidenav/sidenavSlice";
+import { useGetCategoriesWithSubcategoriesQuery } from "@/features/categories/categoriesApi";
 import {
 	Heart,
 	Sun,
@@ -29,7 +29,7 @@ import {
 	ChevronRight,
 	ChevronDown,
 } from "lucide-react";
-// import { getImageUrl } from "@/utils/api"; // Uncomment if you have this util
+
 
 interface SidenavProps {
 	isOpen: boolean;
@@ -45,7 +45,10 @@ const Sidenav: React.FC<SidenavProps> = ({ isOpen, activeCategory, activeSubCate
 	// Replace with your navigation logic if needed
 	// const navigate = useNavigate();
 	const { expandedCategory } = useSelector((state: any) => state.sidenav);
-	const { productCategoryData } = useSelector((state: any) => state.categories.productCategoryData);
+	const branchId = useSelector((state: any) => state.location.selectedBranch?.id);
+	const { data: categoryWithSubcategory, isLoading, error } = useGetCategoriesWithSubcategoriesQuery(branchId);
+
+	
 
 	// Map for icon components
 	const iconMap: Record<string, React.ElementType> = {
@@ -73,7 +76,7 @@ const Sidenav: React.FC<SidenavProps> = ({ isOpen, activeCategory, activeSubCate
 	 * Handle category click: expand/collapse or select
 	 */
 	const handleCategoryClick = (category: any) => {
-		const categoryData = productCategoryData?.find((item: any) => item.category._id === category._id);
+		const categoryData = categoryWithSubcategory?.info?.find((item: any) => item.category._id === category._id);
 		const hasSubcategories = categoryData && categoryData.subcategory && categoryData.subcategory.length > 0;
 
 		if (hasSubcategories) {
@@ -104,14 +107,19 @@ const Sidenav: React.FC<SidenavProps> = ({ isOpen, activeCategory, activeSubCate
 		// navigate(`/products/list/search/?category=${encodedCategory}&subcategory=${encodedSubCategory}`);
 	};
 
+	
+
+
+
 	// If not open, return null (optional)
 	// if (!isOpen) return null;
 
 	return (
 		<div className="space-y-1">
-			{productCategoryData &&
-				productCategoryData.map((item: any, index: number) => {
+			{categoryWithSubcategory &&
+				categoryWithSubcategory?.info?.map((item: any, index: number) => {
 					const category = item.category;
+	
 					const hasSubcategories = item.subcategory && item.subcategory.length > 0;
 
 					// Get the icon from the icon map or default to Heart
