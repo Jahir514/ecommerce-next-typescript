@@ -1,5 +1,12 @@
 export type ObjectId = string;
 
+interface UnitType {
+  _id: ObjectId;
+  name: string;
+  shortform?: string;
+  fractionAllowed?: boolean;
+}
+
 export interface Product {
   _id: ObjectId;
   branch: ObjectId;
@@ -34,7 +41,7 @@ export interface Product {
   expireDate?: string;
   reorderLevel?: number;
   weight?: number;
-  unitType?: ObjectId;
+  unitType?: UnitType;
   availableSize?: ObjectId[];
   online_active?: boolean;
   pos_active?: boolean;

@@ -1,9 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import locationReducer from '../../features/locations/locationSlice';
-import categoriesReducer from '../../features/categories/categoriesSlice';
-import sidenavReducer from '../../features/common/sidenav/sidenavSlice';
-import offerReducer from '../../features/offer/offerSlice';
-import { api } from '../../features/api/api'; // Single RTK Query instance
+import { configureStore } from "@reduxjs/toolkit";
+import locationReducer from "../../features/locations/locationSlice";
+import categoriesReducer from "../../features/categories/categoriesSlice";
+import sidenavReducer from "../../features/common/sidenav/sidenavSlice";
+import offerReducer from "../../features/offer/offerSlice";
+import productReducer from "../../features/products/productsSlice";
+import cartReducer from "../../features/cart/cartSlice";
+import { api } from "../../features/api/api"; // Single RTK Query instance
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +13,8 @@ export const store = configureStore({
     sidenav: sidenavReducer,
     categories: categoriesReducer,
     offer: offerReducer,
+    products: productReducer,
+    cart: cartReducer,
     [api.reducerPath]: api.reducer, // Only one RTK Query reducer
   },
   middleware: (getDefaultMiddleware) =>
